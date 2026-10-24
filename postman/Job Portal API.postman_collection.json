@@ -1,0 +1,525 @@
+{
+  "info": {
+    "_postman_id": "6c3cedac-2011-439c-8501-7e963735ef67",
+    "name": "Job Portal API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59009378",
+    "_collection_link": "https://go.postman.co/collection/59009378-6c3cedac-2011-439c-8501-7e963735ef67?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": []
+    },
+    {
+      "name": "Applications",
+      "item": [
+        {
+          "name": "Apply for Job",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "if (pm.response.code === 201 && response.data?._id) {\r",
+                  "    pm.environment.set(\"applicationId\", response.data._id);\r",
+                  "    console.log(\"Application ID saved:\", response.data._id);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{candidateToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"coverLetter\": \"I am interested in this position and have skills in Java, Spring Boot, and MongoDB.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/applications/jobs/{{jobId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "applications",
+                "jobs",
+                "{{jobId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Applications",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{candidateToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/applications/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "applications",
+                "my"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Applications for My Job",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{employerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/applications/job/{{jobId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "applications",
+                "job",
+                "{{jobId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Application Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{employerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"shortlisted\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/applications/{{applicationId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "applications",
+                "{{applicationId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Withdraw Application",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{candidateToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/applications/{{applicationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "applications",
+                "{{applicationId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Job Application Statistics",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{employerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/{{jobId}}/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "{{jobId}}",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Jobs",
+      "item": [
+        {
+          "name": "Create Job",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\nif (pm.response.code === 201 && response.data?._id) {\r\n    pm.environment.set(\"jobId\", response.data._id);\r\n    console.log(\"New Job ID saved:\", response.data._id);\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{employerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"FSD Developer\",\r\n  \"description\": \"Develop and maintain FSD applications\",\r\n  \"location\": \"Pune\",\r\n  \"salary\": 70000,\r\n  \"type\": \"full-time\",\r\n  \"skills\": [\"Java\", \"Spring Boot\", \"MongoDB\",\"HTML\",\"JS\",\"CSS\"]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Jobs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "if (pm.response.code === 200 && response.data?.length > 0) {\r",
+                  "    pm.environment.set(\"jobId\", response.data[0]._id);\r",
+                  "    console.log(\"Job ID saved:\", response.data[0]._id);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Job By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/{{jobId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "{{jobId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Job.",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{employerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Senior Java Backend Developer\",\r\n  \"description\": \"Develop and maintain REST APIs using Java, Spring Boot, and MongoDB\",\r\n  \"location\": \"Pune\",\r\n  \"salary\": 60000,\r\n  \"jobType\": \"Full-time\",\r\n  \"skills\": [\"Java\", \"Spring Boot\", \"MongoDB\", \"REST API\"]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/{{jobId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "{{jobId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Close Job",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{employerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/{{jobId}}/close",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "{{jobId}}",
+                "close"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Job",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{employerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/{{jobId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "{{jobId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Job Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "{{baseUrl}}/api/auth/login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "if (pm.response.code === 200 && response.token) {\r",
+              "    const role = response.data.role;\r",
+              "\r",
+              "    if (role === \"candidate\") {\r",
+              "        pm.environment.set(\"candidateToken\", response.token);\r",
+              "    } else if (role === \"employer\") {\r",
+              "        pm.environment.set(\"employerToken\", response.token);\r",
+              "    }\r",
+              "\r",
+              "    console.log(\"Login token saved for:\", role);\r",
+              "}\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{employerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Java Backend Developer\",\r\n  \"description\": \"Develop REST APIs using Java and Spring Boot\",\r\n  \"location\": \"Pune\",\r\n  \"salary\": 45000,\r\n  \"jobType\": \"Full-time\",\r\n  \"skills\": [\"Java\", \"Spring Boot\", \"MongoDB\"]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "jobs"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
